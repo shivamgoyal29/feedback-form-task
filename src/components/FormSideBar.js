@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Drawer, Typography } from "@mui/material";
+import { Box, Drawer } from "@mui/material";
+import SideBarFields from "./SideBarFields";
 
 const FormSidebar = () => {
   return (
@@ -14,21 +15,14 @@ const FormSidebar = () => {
           width: 317,
           boxShadow: "0px 4px 4px 0px #00000040",
           position: "fixed",
-          height: "100vh",
           top: 64,
+          height: "100vh",
+          overflowY: "auto",
         },
       }}
     >
-      <Box
-        width="100%"
-        height="100%"
-        bgcolor="#ffffff"
-        sx={{
-          overflow: "auto",
-        }}
-      >
-        <Typography variant="h6">lorem500</Typography>
-        {/* Additional content can go here */}
+      <Box width="100%" bgcolor="#ffffff">
+        <SideBarFields />
       </Box>
     </Drawer>
   );
