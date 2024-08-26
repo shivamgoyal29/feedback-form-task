@@ -9,15 +9,15 @@ import {
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIosSharpIcon from "@mui/icons-material/ArrowBackIosSharp";
-import TextComponent from "./formCompnents/TextCompnent";
-import NumericRatingComponent from "./formCompnents/NumericRatingCompnent";
-import StarRatingComponent from "./formCompnents/StarRatingComponet";
-import SmileyRatingComponent from "./formCompnents/SmileyRtingComponent";
-import SingleLineInputComponent from "./formCompnents/SingleLineInputComponent";
-import RadioButtonComponent from "./formCompnents/RadioButtonCompnent";
-import CategoriesComponent from "./formCompnents/CategoriesComponent";
+import TextComponent from "./formComponents/TextCompnent";
+import NumericRatingComponent from "./formComponents/NumericRatingCompnent";
+import StarRatingComponent from "./formComponents/StarRatingComponet";
+import SmileyRatingComponent from "./formComponents/SmileyRtingComponent";
+import SingleLineInputComponent from "./formComponents/SingleLineInputComponent";
+import RadioButtonComponent from "./formComponents/RadioButtonCompnent";
+import CategoriesComponent from "./formComponents/CategoriesComponent";
 
-const FormCard = () => {
+const FormCard = ({ savedFields }) => {
   // Define click handlers for the buttons
   const handleEditClick = () => {
     console.log("Edit button clicked");
@@ -25,6 +25,56 @@ const FormCard = () => {
 
   const handleDeleteClick = () => {
     console.log("Delete button clicked");
+  };
+
+  const renderComponent = (type, label) => {
+    switch (type) {
+      case "Textarea":
+        return <TextComponent label={label.label} required={label.required} />;
+      case "Smiley Rating":
+        return (
+          <SmileyRatingComponent
+            label={label.label}
+            required={label.required}
+          />
+        );
+      case "Rating":
+        return (
+          <StarRatingComponent label={label.label} required={label.required} />
+        );
+      case "Category":
+        return (
+          <CategoriesComponent
+            label={label.label}
+            options={label.options}
+            required={label.required}
+          />
+        );
+      case "Numerical Rating":
+        return (
+          <NumericRatingComponent
+            label={label.label}
+            required={label.required}
+          />
+        );
+      case "Radio Button":
+        return (
+          <RadioButtonComponent
+            label={label.label}
+            options={label.options}
+            required={label.required}
+          />
+        );
+      case "Single Line Input":
+        return (
+          <SingleLineInputComponent
+            label={label.label}
+            required={label.required}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -76,13 +126,9 @@ const FormCard = () => {
           paddingBottom: "16px", // Extra padding at the bottom
         }}
       >
-        <TextComponent />
-        <NumericRatingComponent />
-        <StarRatingComponent />
-        <SmileyRatingComponent />
-        <SingleLineInputComponent />
-        <RadioButtonComponent />
-        <CategoriesComponent />
+        {savedFields.map((field, index) =>
+          renderComponent(field.type, field.label)
+        )}
       </CardContent>
     </Card>
   );

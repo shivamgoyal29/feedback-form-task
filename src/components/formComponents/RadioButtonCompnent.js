@@ -1,9 +1,23 @@
-import { Box, IconButton, Paper, TextField, Typography } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Paper,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  Typography,
+  FormControl,
+  IconButton,
+} from "@mui/material";
+import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const TextComponent = () => {
+const RadioButtonComponent = ({ label, options, required }) => {
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
   return (
     <Paper
       sx={{
@@ -11,7 +25,7 @@ const TextComponent = () => {
         backgroundColor: "#FFFFFF",
         maxWidth: "473px",
         border: "1px solid #DBD6D6",
-        padding: "16px", // Add padding here
+        padding: "16px",
       }}
     >
       <Typography
@@ -23,17 +37,27 @@ const TextComponent = () => {
           marginBottom: "8px",
         }}
       >
-        Enter Your Input
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
-      <Box mb={2}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Type something..."
-          multiline
-          rows={3}
-        />
-      </Box>
+      <FormControl component="fieldset">
+        <RadioGroup
+          aria-labelledby="radio-buttons-group-label"
+          value={selectedValue}
+          onChange={handleChange}
+          name="radio-buttons-group"
+        >
+          {options.map((option, index) => (
+            <FormControlLabel
+              key={index}
+              value={option}
+              control={<Radio />}
+              label={
+                <Typography sx={{ fontSize: "14px" }}>{option}</Typography>
+              }
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
       <Box
         display="flex"
         justifyContent="flex-end" // Align buttons to the right
@@ -69,4 +93,4 @@ const TextComponent = () => {
   );
 };
 
-export default TextComponent;
+export default RadioButtonComponent;

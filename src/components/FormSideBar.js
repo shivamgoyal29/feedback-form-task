@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Drawer } from "@mui/material";
 import SideBarFields from "./SideBarFields";
 
-const FormSidebar = () => {
+const FormSidebar = ({ onSaveField }) => {
   return (
     <Drawer
       anchor="right"
@@ -22,7 +22,7 @@ const FormSidebar = () => {
       }}
     >
       <Box width="100%" bgcolor="#ffffff">
-        <SideBarFields />
+        <SideBarFields onSaveField={onSaveField} />
       </Box>
     </Drawer>
   );

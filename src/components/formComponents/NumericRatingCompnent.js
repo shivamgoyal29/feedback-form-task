@@ -1,9 +1,23 @@
-import { Box, IconButton, Paper, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import {
+  Box,
+  Paper,
+  Typography,
+  Button,
+  ToggleButtonGroup,
+  ToggleButton,
+  IconButton,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const SingleLineInputComponent = () => {
+const NumericRatingComponent = ({ label, required }) => {
+  const [rating, setRating] = useState(null);
+
+  const handleRatingChange = (event, newRating) => {
+    setRating(newRating);
+  };
+
   return (
     <Paper
       sx={{
@@ -23,14 +37,34 @@ const SingleLineInputComponent = () => {
           marginBottom: "8px",
         }}
       >
-        Enter Your Input
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
+
       <Box mb={2}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Type something..."
-        />
+        <ToggleButtonGroup
+          value={rating}
+          exclusive
+          onChange={handleRatingChange}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "8px",
+          }}
+        >
+          {[...Array(10)].map((_, index) => (
+            <ToggleButton
+              key={index}
+              value={index + 1}
+              sx={{
+                width: "40px",
+                color: "#645757",
+                border: "1px solid #DDD4D4",
+              }}
+            >
+              {index + 1}
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
       </Box>
       <Box
         display="flex"
@@ -67,4 +101,4 @@ const SingleLineInputComponent = () => {
   );
 };
 
-export default SingleLineInputComponent;
+export default NumericRatingComponent;

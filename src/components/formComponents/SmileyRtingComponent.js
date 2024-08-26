@@ -21,7 +21,7 @@ const SmileyRating = styled(Rating)({
   },
 });
 
-const SmileyRatingComponent = () => {
+const SmileyRatingComponent = ({ label, required }) => {
   const [rating, setRating] = useState(0);
 
   const handleRatingChange = (event, newValue) => {
@@ -47,7 +47,7 @@ const SmileyRatingComponent = () => {
           marginBottom: "8px",
         }}
       >
-        Rate Your Experience
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
 
       <Box mb={2}>

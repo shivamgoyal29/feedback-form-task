@@ -1,15 +1,9 @@
-import React, { useState } from "react";
-import { Box, Paper, Typography, Rating, IconButton } from "@mui/material";
+import { Box, IconButton, Paper, TextField, Typography } from "@mui/material";
+import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const StarRatingComponent = () => {
-  const [rating, setRating] = useState(0);
-
-  const handleRatingChange = (event, newValue) => {
-    setRating(newValue);
-  };
-
+const SingleLineInputComponent = ({ label, required }) => {
   return (
     <Paper
       sx={{
@@ -29,16 +23,13 @@ const StarRatingComponent = () => {
           marginBottom: "8px",
         }}
       >
-        Rate Your Experience
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
-
       <Box mb={2}>
-        <Rating
-          name="star-rating"
-          value={rating}
-          onChange={handleRatingChange}
-          size="large"
-          sx={{ color: "#FFD700" }} // Optional: Gold color for stars
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Type something..."
         />
       </Box>
       <Box
@@ -76,4 +67,4 @@ const StarRatingComponent = () => {
   );
 };
 
-export default StarRatingComponent;
+export default SingleLineInputComponent;

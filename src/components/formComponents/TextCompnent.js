@@ -1,23 +1,9 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  ToggleButtonGroup,
-  ToggleButton,
-  IconButton,
-} from "@mui/material";
+import { Box, IconButton, Paper, TextField, Typography } from "@mui/material";
+import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const NumericRatingComponent = () => {
-  const [rating, setRating] = useState(null);
-
-  const handleRatingChange = (event, newRating) => {
-    setRating(newRating);
-  };
-
+const TextComponent = ({ label, required }) => {
   return (
     <Paper
       sx={{
@@ -25,7 +11,7 @@ const NumericRatingComponent = () => {
         backgroundColor: "#FFFFFF",
         maxWidth: "473px",
         border: "1px solid #DBD6D6",
-        padding: "16px",
+        padding: "16px", // Add padding here
       }}
     >
       <Typography
@@ -37,34 +23,16 @@ const NumericRatingComponent = () => {
           marginBottom: "8px",
         }}
       >
-        Rate Your Experience
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
-
       <Box mb={2}>
-        <ToggleButtonGroup
-          value={rating}
-          exclusive
-          onChange={handleRatingChange}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "8px",
-          }}
-        >
-          {[...Array(10)].map((_, index) => (
-            <ToggleButton
-              key={index}
-              value={index + 1}
-              sx={{
-                width: "40px",
-                color: "#645757",
-                border: "1px solid #DDD4D4",
-              }}
-            >
-              {index + 1}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Type something..."
+          multiline
+          rows={3}
+        />
       </Box>
       <Box
         display="flex"
@@ -101,4 +69,4 @@ const NumericRatingComponent = () => {
   );
 };
 
-export default NumericRatingComponent;
+export default TextComponent;

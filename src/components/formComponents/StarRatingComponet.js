@@ -1,18 +1,15 @@
-import {
-  Box,
-  Paper,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  Typography,
-  FormControl,
-  IconButton,
-} from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { Box, Paper, Typography, Rating, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const RadioButtonComponent = () => {
+const StarRatingComponent = ({ label, required }) => {
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (event, newValue) => {
+    setRating(newValue);
+  };
+
   return (
     <Paper
       sx={{
@@ -32,31 +29,18 @@ const RadioButtonComponent = () => {
           marginBottom: "8px",
         }}
       >
-        Question
+        {label} {required && <span style={{ color: "red" }}>*</span>}
       </Typography>
-      <FormControl>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="female"
-          name="radio-buttons-group"
-        >
-          <FormControlLabel
-            value="female"
-            control={<Radio />}
-            label={<Typography sx={{ fontSize: "14px" }}>Female</Typography>}
-          />
-          <FormControlLabel
-            value="male"
-            control={<Radio />}
-            label={<Typography sx={{ fontSize: "14px" }}>Male</Typography>}
-          />
-          <FormControlLabel
-            value="other"
-            control={<Radio />}
-            label={<Typography sx={{ fontSize: "14px" }}>Other</Typography>}
-          />
-        </RadioGroup>
-      </FormControl>
+
+      <Box mb={2}>
+        <Rating
+          name="star-rating"
+          value={rating}
+          onChange={handleRatingChange}
+          size="large"
+          sx={{ color: "#FFD700" }} // Optional: Gold color for stars
+        />
+      </Box>
       <Box
         display="flex"
         justifyContent="flex-end" // Align buttons to the right
@@ -92,4 +76,4 @@ const RadioButtonComponent = () => {
   );
 };
 
-export default RadioButtonComponent;
+export default StarRatingComponent;
