@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -8,8 +8,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const CreateNewFormModal = ({ open, handleClose }) => {
+const CreateNewFormModal = ({ open, handleClose, create, formName1 }) => {
+  const [formName, setFormName] = useState("");
+  const navigate = useNavigate();
+
+  const x = formName1;
+
+  useEffect(() => {
+    if (x) {
+      setFormName(x);
+    }
+  }, [x]);
+
+  const createFormHandler = () => {
+    handleClose();
+    navigate("/admin/create-form", { state: formName });
+  };
   return (
     <Dialog
       open={open}
@@ -34,7 +50,7 @@ const CreateNewFormModal = ({ open, handleClose }) => {
           variant="h6"
           sx={{ fontWeight: "medium", fontSize: "20px" }}
         >
-          Create Feedback Form
+          {create} Feedback Form
         </Typography>
       </DialogTitle>
       <DialogContent sx={{ pb: 0 }}>
@@ -47,17 +63,19 @@ const CreateNewFormModal = ({ open, handleClose }) => {
           type="text"
           fullWidth
           variant="standard"
+          value={formName}
+          onChange={(e) => setFormName(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <Button variant="Text" color="Primary">
+        <Button variant="Text" color="Primary" onClick={createFormHandler}>
           <Typography
             sx={{ fontWeight: "medium", fontSize: "14px", color: "#189657" }}
           >
-            Create
+            {create}
           </Typography>
         </Button>
-        <Button variant="Text" color="Primary">
+        <Button variant="Text" color="Primary" onClick={handleClose}>
           <Typography
             sx={{ fontWeight: "medium", fontSize: "14px", color: "#19191957" }}
           >

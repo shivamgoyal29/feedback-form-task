@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Drawer } from "@mui/material";
 import SideBarFields from "./SideBarFields";
 
-const FormSidebar = () => {
+const FormSidebar = ({ onSaveField, initialData }) => {
+  const [initialData1, setInitialData1] = useState({});
+  useEffect(() => {
+    setInitialData1(initialData);
+    console.log(initialData);
+  }, [initialData]);
+
   return (
     <Drawer
       anchor="right"
@@ -22,7 +28,7 @@ const FormSidebar = () => {
       }}
     >
       <Box width="100%" bgcolor="#ffffff">
-        <SideBarFields />
+        <SideBarFields onSaveField={onSaveField} initialData={initialData1} />
       </Box>
     </Drawer>
   );
