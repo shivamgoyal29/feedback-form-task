@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Paper,
@@ -10,12 +10,15 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const GridButtonComponent = ({
+const CategoriesComponent = ({
+  type,
   label,
+  id,
   options,
   required,
-  onUpdate,
+  errorMessage,
   onDelete,
+  onEdit,
 }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -28,23 +31,30 @@ const GridButtonComponent = ({
     );
   };
 
-  // const [isEditing, setIsEditing] = useState(false);
+  const handleEditClick = () => {
+    onEdit({
+      activebox: type,
+      intialData: { label, options, required, errorMessage },
+      id: id,
+    });
+  };
 
-  // const handleEditClick = () => {
-  //   setIsEditing(true);
-  // };
+  const handleDelteClick = () => {
+    onDelete({ id: id });
+  };
+  const [showError, setShowError] = useState(false);
 
-  // const handleSave = (updatedField) => {
-  //   onUpdate(updatedField);
-  //   setIsEditing(false);
-  // };
-
-  // // const handleDeleteClick = () => {
-  // //   onDelete(field.id); // Assuming field has a unique 'id'
-  // // };
+  useEffect(() => {
+    if (required && !selectedOptions.length) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
+  }, [selectedOptions, required]);
 
   return (
     <Paper
+      key={id}
       sx={{
         boxShadow: "0px 2px 4px 0px #00000040",
         backgroundColor: "#FFFFFF",
@@ -95,37 +105,55 @@ const GridButtonComponent = ({
 
       <Box
         display="flex"
-        justifyContent="flex-end" // Align buttons to the right
+        justifyContent="space-between" // Space out items to the left and right
+        alignItems="center" // Align items vertically in the center
       >
-        <IconButton
-          aria-label="edit"
-          sx={{
-            opacity: 0.5,
-            color: "black",
-            fontSize: "24px",
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton
-          aria-label="delete"
-          sx={{
-            opacity: 0.5,
-            color: "black",
-            fontSize: "24px",
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <Box flexGrow={1} textAlign="left">
+          {showError && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                color: "red",
+                fontWeight: "400",
+              }}
+            >
+              *{errorMessage}
+            </Typography>
+          )}
+        </Box>
+        <Box>
+          <IconButton
+            onClick={handleEditClick}
+            aria-label="edit"
+            sx={{
+              opacity: 0.5,
+              color: "black",
+              fontSize: "24px",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={handleDelteClick}
+            aria-label="delete"
+            sx={{
+              opacity: 0.5,
+              color: "black",
+              fontSize: "24px",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Box>
       </Box>
     </Paper>
   );
 };
 
-export default GridButtonComponent;
+export default CategoriesComponent;

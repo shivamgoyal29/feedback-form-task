@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,9 +17,14 @@ import SingleLineInputIcon from "@mui/icons-material/Input";
 import AddIcon from "@mui/icons-material/Add";
 import TextareaBox from "./SideBarComponentsBoxes/TextareaBox";
 
-const SideBarFields = ({ onSaveField }) => {
+const SideBarFields = ({ onSaveField, initialData }) => {
   const [activeBox, setActiveBox] = useState(null);
   const [fieldType, setFieldType] = useState("");
+  const [intiaialData1, setInitialData1] = useState({
+    activeBox: null,
+    initialData: {},
+    id: undefined,
+  });
 
   const handleOpenBox = (box) => {
     setFieldType(box);
@@ -27,12 +32,20 @@ const SideBarFields = ({ onSaveField }) => {
   };
   const handleCloseBox = () => {
     setActiveBox(null);
+    setInitialData1({ activeBox: null, initialData: {}, id: undefined });
   };
 
   const handleSaveField = (label) => {
+    console.log("this:", label);
     onSaveField({ type: fieldType, label }); // Call the function passed from FormCard
     handleCloseBox(); // Close the active box
   };
+  useEffect(() => {
+    if (initialData) {
+      handleOpenBox(initialData.activebox);
+      setInitialData1(initialData);
+    }
+  }, [initialData]);
 
   const renderBox = () => {
     switch (activeBox) {
@@ -40,6 +53,8 @@ const SideBarFields = ({ onSaveField }) => {
       case "Radio Button":
         return (
           <TextareaBox
+            initialData={intiaialData1.intialData}
+            id={intiaialData1.id}
             onClose={handleCloseBox}
             onSave={handleSaveField}
             fieldType={activeBox} // Pass fieldType to TextareaBox
@@ -52,6 +67,8 @@ const SideBarFields = ({ onSaveField }) => {
       case "Single Line Input":
         return (
           <TextareaBox
+            initialData={intiaialData1.intialData}
+            id={intiaialData1.id}
             onClose={handleCloseBox}
             onSave={handleSaveField}
             fieldType={null} // No options for these types

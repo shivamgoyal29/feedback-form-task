@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import {
   Box,
   Typography,
@@ -11,10 +11,21 @@ import ArrowBackIosSharpIcon from "@mui/icons-material/ArrowBackIosSharp";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-const TextareaBox = ({ onClose, onSave, fieldType }) => {
+const TextareaBox = ({ onClose, onSave, fieldType, initialData, id }) => {
   const [label, setLabel] = useState("");
   const [options, setOptions] = useState([""]); // Initial empty option
   const [required, setRequired] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      // setUniqueId(initialData.uniqueID || null);
+      setLabel(initialData.label || "");
+      setOptions(initialData.options || [""]);
+      setRequired(initialData.required || false);
+      setErrorMessage(initialData.errorMessage || "");
+    }
+  }, [initialData]);
 
   const handleSwitchChange = (event) => {
     setRequired(event.target.checked);
@@ -35,7 +46,7 @@ const TextareaBox = ({ onClose, onSave, fieldType }) => {
   };
 
   const handleSave = () => {
-    onSave({ label, options, required }); // Pass label and options to the parent
+    onSave({ label, options, required, errorMessage, id }); // Pass label and options to the parent
     onClose(); // Close the TextareaBox after saving
   };
 
@@ -140,7 +151,13 @@ const TextareaBox = ({ onClose, onSave, fieldType }) => {
       </Box>
 
       {required && (
-        <TextField variant="standard" label="Error message" fullWidth />
+        <TextField
+          variant="standard"
+          label="Error message"
+          value={errorMessage}
+          onChange={(e) => setErrorMessage(e.target.value)}
+          fullWidth
+        />
       )}
 
       {/* Save and Cancel Buttons */}

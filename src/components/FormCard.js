@@ -6,7 +6,7 @@ import {
   IconButton,
   Box,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIosSharpIcon from "@mui/icons-material/ArrowBackIosSharp";
 import TextComponent from "./formComponents/TextCompnent";
@@ -16,31 +16,61 @@ import SmileyRatingComponent from "./formComponents/SmileyRtingComponent";
 import SingleLineInputComponent from "./formComponents/SingleLineInputComponent";
 import RadioButtonComponent from "./formComponents/RadioButtonCompnent";
 import CategoriesComponent from "./formComponents/CategoriesComponent";
+import { useNavigate } from "react-router-dom";
 
-const FormCard = ({ savedFields }) => {
-  // Define click handlers for the buttons
+const FormCard = ({
+  savedFields,
+  onEditField,
+  onDeleteField,
+  formModal,
+  formName,
+}) => {
+  const navigate = useNavigate();
   const handleEditClick = () => {
-    console.log("Edit button clicked");
+    formModal({ open: true, edit: "Edit", formName1: formName });
   };
 
-  const handleDeleteClick = () => {
-    console.log("Delete button clicked");
+  const handleBackClick = () => {
+    navigate("/admin/dashboard");
   };
 
-  const renderComponent = (type, label) => {
+  const renderComponent = (type, label, id) => {
     switch (type) {
       case "Textarea":
-        return <TextComponent label={label.label} required={label.required} />;
+        return (
+          <TextComponent
+            label={label.label}
+            required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
+          />
+        );
       case "Smiley Rating":
         return (
           <SmileyRatingComponent
             label={label.label}
             required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
           />
         );
       case "Rating":
         return (
-          <StarRatingComponent label={label.label} required={label.required} />
+          <StarRatingComponent
+            label={label.label}
+            required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
+          />
         );
       case "Category":
         return (
@@ -48,6 +78,11 @@ const FormCard = ({ savedFields }) => {
             label={label.label}
             options={label.options}
             required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
           />
         );
       case "Numerical Rating":
@@ -55,6 +90,11 @@ const FormCard = ({ savedFields }) => {
           <NumericRatingComponent
             label={label.label}
             required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
           />
         );
       case "Radio Button":
@@ -63,6 +103,11 @@ const FormCard = ({ savedFields }) => {
             label={label.label}
             options={label.options}
             required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
           />
         );
       case "Single Line Input":
@@ -70,6 +115,11 @@ const FormCard = ({ savedFields }) => {
           <SingleLineInputComponent
             label={label.label}
             required={label.required}
+            onEdit={onEditField}
+            id={id}
+            onDelete={onDeleteField}
+            type={type}
+            errorMessage={label.errorMessage}
           />
         );
       default:
@@ -94,7 +144,7 @@ const FormCard = ({ savedFields }) => {
             <IconButton
               aria-label="back"
               color="inherit"
-              onClick={handleEditClick}
+              onClick={handleBackClick}
             >
               <ArrowBackIosSharpIcon />
             </IconButton>
@@ -104,13 +154,13 @@ const FormCard = ({ savedFields }) => {
                 variant="h6"
                 sx={{ marginRight: "8px", fontSize: "24px" }}
               >
-                Hello
+                {formName}
               </Typography>
 
               <IconButton
                 aria-label="edit"
                 color="inherit"
-                onClick={handleDeleteClick}
+                onClick={handleEditClick}
               >
                 <EditIcon />
               </IconButton>
@@ -127,7 +177,7 @@ const FormCard = ({ savedFields }) => {
         }}
       >
         {savedFields.map((field, index) =>
-          renderComponent(field.type, field.label)
+          renderComponent(field.type, field.label, field.id)
         )}
       </CardContent>
     </Card>

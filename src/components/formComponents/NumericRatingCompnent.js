@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Paper,
@@ -11,15 +11,47 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const NumericRatingComponent = ({ label, required }) => {
+const NumericRatingComponent = ({
+  type,
+  label,
+  id,
+  options,
+  required,
+  onDelete,
+  onEdit,
+  errorMessage,
+}) => {
   const [rating, setRating] = useState(null);
 
   const handleRatingChange = (event, newRating) => {
     setRating(newRating);
   };
 
+  const handleEditClick = () => {
+    onEdit({
+      activebox: type,
+      intialData: { label, options, required, errorMessage },
+      id: id,
+    });
+  };
+
+  const handleDelteClick = () => {
+    onDelete({ id: id });
+  };
+
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (required && rating === null) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
+  }, [rating, required]);
+
   return (
     <Paper
+      key={id}
       sx={{
         boxShadow: "0px 2px 4px 0px #00000040",
         backgroundColor: "#FFFFFF",
@@ -68,34 +100,52 @@ const NumericRatingComponent = ({ label, required }) => {
       </Box>
       <Box
         display="flex"
-        justifyContent="flex-end" // Align buttons to the right
+        justifyContent="space-between" // Space out items to the left and right
+        alignItems="center" // Align items vertically in the center
       >
-        <IconButton
-          aria-label="edit"
-          sx={{
-            opacity: 0.5,
-            color: "black",
-            fontSize: "24px",
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton
-          aria-label="delete"
-          sx={{
-            opacity: 0.5,
-            color: "black",
-            fontSize: "24px",
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <Box flexGrow={1} textAlign="left">
+          {showError && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                color: "red",
+                fontWeight: "400",
+              }}
+            >
+              *{errorMessage}
+            </Typography>
+          )}
+        </Box>
+        <Box>
+          <IconButton
+            onClick={handleEditClick}
+            aria-label="edit"
+            sx={{
+              opacity: 0.5,
+              color: "black",
+              fontSize: "24px",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={handleDelteClick}
+            aria-label="delete"
+            sx={{
+              opacity: 0.5,
+              color: "black",
+              fontSize: "24px",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Box>
       </Box>
     </Paper>
   );

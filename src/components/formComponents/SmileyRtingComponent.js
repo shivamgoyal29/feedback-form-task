@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Paper, Typography, Rating, IconButton } from "@mui/material";
 import { styled } from "@mui/system";
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
@@ -9,27 +9,76 @@ import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDiss
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// Custom styled Rating component with smiley faces
-const SmileyRating = styled(Rating)({
+const SmileyRating = styled(Rating)(({ theme }) => ({
   "& .MuiRating-iconFilled": {
-    color: "#000000", // Set the filled smiley color
-    opacity: 0.18, // Set opacity to 18%
+    color: "#FFD700", // Set the filled smiley color
+    opacity: 1, // Fully opaque for selected
+    transform: "scale(1.2)", // Slightly scale up the icon when selected
+    transition: "transform 0.2s ease", // Smooth transition for scaling
+  },
+  "& .MuiRating-iconEmpty": {
+    color: "#000000", // Color of unselected smileys
+    opacity: 0.18, // Semi-transparent
   },
   "& .MuiRating-iconHover": {
-    color: "#000000", // Ensure hover smileys are black
-    opacity: 0.18,
+    color: "#FFD700", // Hover color
+    opacity: 0.6, // Semi-transparent on hover
   },
-});
+}));
 
-const SmileyRatingComponent = ({ label, required }) => {
+const SmileyRatingComponent = ({
+  type,
+  label,
+  id,
+  options,
+  required,
+  onDelete,
+  onEdit,
+  errorMessage,
+}) => {
   const [rating, setRating] = useState(0);
 
   const handleRatingChange = (event, newValue) => {
-    setRating(newValue);
+    if (newValue === null) {
+      setRating(0); // Reset rating to 0 when deselected
+    } else {
+      setRating(newValue);
+    }
+  };
+
+  const handleEditClick = () => {
+    onEdit({
+      activebox: type,
+      intialData: { label, options, required, errorMessage },
+      id: id,
+    });
+  };
+
+  const handleDelteClick = () => {
+    onDelete({ id: id });
+  };
+
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (required && rating === 0) {
+      setShowError(true);
+    } else {
+      setShowError(false);
+    }
+  }, [rating, required]);
+
+  const iconMapping = {
+    1: <SentimentVeryDissatisfiedIcon />,
+    2: <SentimentDissatisfiedIcon />,
+    3: <SentimentNeutralIcon />,
+    4: <SentimentSatisfiedIcon />,
+    5: <SentimentVerySatisfiedIcon />,
   };
 
   return (
     <Paper
+      key={id}
       sx={{
         boxShadow: "0px 2px 4px 0px #00000040",
         backgroundColor: "#FFFFFF",
@@ -57,8 +106,8 @@ const SmileyRatingComponent = ({ label, required }) => {
           onChange={handleRatingChange}
           size="large"
           precision={1}
-          icon={<SentimentVeryDissatisfiedIcon />}
-          emptyIcon={<SentimentVeryDissatisfiedIcon />}
+          icon={iconMapping[rating] || <SentimentNeutralIcon />}
+          emptyIcon={<SentimentNeutralIcon />}
           getLabelText={(value) => {
             switch (value) {
               case 1:
@@ -79,34 +128,52 @@ const SmileyRatingComponent = ({ label, required }) => {
       </Box>
       <Box
         display="flex"
-        justifyContent="flex-end" // Align buttons to the right
+        justifyContent="space-between" // Space out items to the left and right
+        alignItems="center" // Align items vertically in the center
       >
-        <IconButton
-          aria-label="edit"
-          sx={{
-            opacity: 0.5,
-            color: "black",
-            fontSize: "24px",
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton
-          aria-label="delete"
-          sx={{
-            opacity: 0.5,
-            color: "black",
-            fontSize: "24px",
-            "&:hover": {
-              opacity: 0.7,
-            },
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
+        <Box flexGrow={1} textAlign="left">
+          {showError && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                color: "red",
+                fontWeight: "400",
+              }}
+            >
+              *{errorMessage}
+            </Typography>
+          )}
+        </Box>
+        <Box>
+          <IconButton
+            onClick={handleEditClick}
+            aria-label="edit"
+            sx={{
+              opacity: 0.5,
+              color: "black",
+              fontSize: "24px",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+          <IconButton
+            onClick={handleDelteClick}
+            aria-label="delete"
+            sx={{
+              opacity: 0.5,
+              color: "black",
+              fontSize: "24px",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Box>
       </Box>
     </Paper>
   );

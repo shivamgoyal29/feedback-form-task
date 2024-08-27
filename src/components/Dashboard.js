@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
-import { Card } from "@mui/material";
+import { Box, Card } from "@mui/material";
 import NewFormCard from "./NewFormCard";
-import CreateNewFormMoadal from "./CreateNewFormModal";
+import CreateNewFormModal from "./CreateNewFormModal";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [create, setCreate] = useState("");
+
+  const handleOpen = () => {
+    setOpen(true);
+    setCreate("Create");
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <div id="dashboard">
+    <Box marginTop="64px">
       <Grid
         container
         spacing={3}
@@ -34,8 +41,12 @@ const Dashboard = () => {
           </Card>
         </Grid>
       </Grid>
-      <CreateNewFormMoadal open={open} handleClose={handleClose} />
-    </div>
+      <CreateNewFormModal
+        open={open}
+        handleClose={handleClose}
+        create={create}
+      />
+    </Box>
   );
 };
 
