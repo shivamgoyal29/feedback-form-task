@@ -6,12 +6,6 @@ Welcome to the Feedback Form Task repository! This project involves developing a
 
 - [Admin Dashboard](https://feedback-form-task.web.app/admin/dashboard)
 
-  Form will work on:
-- [Feedback Form - Home](https://feedback-form-task.web.app/website/home)
-- [Feedback Form - About](https://feedback-form-task.web.app/website/about)
-- [Home](https://feedback-form-task.web.app/)
-
-
 ## Task Brief
 
 Develop a system where users can:
