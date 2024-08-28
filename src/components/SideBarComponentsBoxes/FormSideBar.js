@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, Drawer } from "@mui/material";
 import SideBarFields from "./SideBarFields";
 
-const FormSidebar = ({ onSaveField, initialData }) => {
+const FormSidebar = ({
+  onSaveField,
+  initialData,
+  URLlogic,
+  DateLogic,
+  TimeLogic,
+}) => {
   const [initialData1, setInitialData1] = useState({});
   useEffect(() => {
     setInitialData1(initialData);
@@ -28,7 +34,13 @@ const FormSidebar = ({ onSaveField, initialData }) => {
       }}
     >
       <Box width="100%" bgcolor="#ffffff">
-        <SideBarFields onSaveField={onSaveField} initialData={initialData1} />
+        <SideBarFields
+          onSaveField={onSaveField}
+          initialData={initialData1}
+          URLlogic={URLlogic}
+          DateLogic={DateLogic}
+          TimeLogic={TimeLogic}
+        />
       </Box>
     </Drawer>
   );
