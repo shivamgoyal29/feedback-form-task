@@ -6,7 +6,7 @@ Welcome to the Feedback Form Task repository! This project involves developing a
 
 - [Admin Dashboard](https://feedback-form-task.web.app/admin/dashboard)
 
-  Foem will work on:
+  Form will work on:
 - [Feedback Form - Home](https://feedback-form-task.web.app/website/home)
 - [Feedback Form - About](https://feedback-form-task.web.app/website/about)
 - [Home](https://feedback-form-task.web.app/)
@@ -75,6 +75,11 @@ Develop a system where users can:
   - `/website/about`
   - `/website/services`
   - `/website/contact`
+ 
+The form will work on the following:
+- [Feedback Form - Home](https://feedback-form-task.web.app/website/home)
+- [Feedback Form - About](https://feedback-form-task.web.app/website/about)
+- [Home](https://feedback-form-task.web.app/)
 
 
 ### Setup Instructions
