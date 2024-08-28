@@ -17,6 +17,7 @@ import SingleLineInputComponent from "./formComponents/SingleLineInputComponent"
 import RadioButtonComponent from "./formComponents/RadioButtonCompnent";
 import CategoriesComponent from "./formComponents/CategoriesComponent";
 import { useNavigate } from "react-router-dom";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const FormCard = ({
   savedFields,
@@ -25,6 +26,7 @@ const FormCard = ({
   formModal,
   formName,
 }) => {
+  //   const [fields, setFields] = useState(savedFields);
   const navigate = useNavigate();
   const handleEditClick = () => {
     formModal({ open: true, edit: "Edit", formName1: formName });
@@ -33,6 +35,13 @@ const FormCard = ({
   const handleBackClick = () => {
     navigate("/admin/dashboard");
   };
+  //   const onDragEnd = (result) => {
+  //     if (!result.destination) return;
+  //     const reorderedFields = Array.from(fields);
+  //     const [movedField] = reorderedFields.splice(result.source.index, 1);
+  //     reorderedFields.splice(result.destination.index, 0, movedField);
+  //     setFields(reorderedFields);
+  //   };
 
   const renderComponent = (type, label, id) => {
     switch (type) {
@@ -180,6 +189,85 @@ const FormCard = ({
           renderComponent(field.type, field.label, field.id)
         )}
       </CardContent>
+      {/* <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px", // Space between components
+          paddingBottom: "16px", // Extra padding at the bottom
+        }}
+      > */}
+      {/* <DragDropContext>
+          <Droppable droppableId="savedFields">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {savedFields.map((field, index) => {
+                  return (
+                    <Draggable
+                      key={field.id.toString()}
+                      draggableId={field.id.toString()}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <div
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          ref={provided.innerRef}
+                        >
+                          {renderComponent(field.type, field.label, field.id)}
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                })}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext> */}
+      {/* </CardContent> */}
+      {/* <CardContent
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          paddingBottom: "16px",
+        }}
+      >
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="fields">
+            {(provided) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                }}
+              >
+                {fields.map((field, index) => (
+                  <Draggable
+                    key={field.id}
+                    draggableId={field.id.toString()}
+                    index={index}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        {renderComponent(field.type, field.label, field.id)}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </CardContent> */}
     </Card>
   );
 };

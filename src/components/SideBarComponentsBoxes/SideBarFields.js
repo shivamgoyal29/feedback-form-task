@@ -15,9 +15,15 @@ import NumericIcon from "@mui/icons-material/Numbers";
 import RadioButtonIcon from "@mui/icons-material/RadioButtonUnchecked";
 import SingleLineInputIcon from "@mui/icons-material/Input";
 import AddIcon from "@mui/icons-material/Add";
-import TextareaBox from "./SideBarComponentsBoxes/TextareaBox";
+import TextareaBox from "./TextareaBox";
 
-const SideBarFields = ({ onSaveField, initialData }) => {
+const SideBarFields = ({
+  onSaveField,
+  initialData,
+  URLlogic,
+  DateLogic,
+  TimeLogic,
+}) => {
   const [activeBox, setActiveBox] = useState(null);
   const [fieldType, setFieldType] = useState("");
   const [intiaialData1, setInitialData1] = useState({
@@ -25,6 +31,35 @@ const SideBarFields = ({ onSaveField, initialData }) => {
     initialData: {},
     id: undefined,
   });
+  const [urlCondition, setUrlCondition] = useState("");
+  const [urlConditionActive, setUrlConditionActive] = useState(false);
+  const [specificDate, setSpecificDate] = useState("");
+  const [activeDate, setActiveDate] = useState(false);
+  const [specificTime, setSpecificTime] = useState("");
+  const [activeTime, setActiveTime] = useState(false);
+
+  // useEffect(() => {
+  //   logic({
+  //     URLlogic: { active: urlConditionActive, path: urlCondition },
+  //     dateLogic: { active: activeDate, date: specificDate },
+  //     timeLogic: { active: activeTime, time: specificTime },
+  //   });
+  // }, []);
+
+  const handleUrlConditionChange = (e) => {
+    setUrlCondition(e.target.value);
+    URLlogic({ path: e.target.value, active: urlConditionActive });
+  };
+
+  const handleDateChange = (e) => {
+    setSpecificDate(e.target.value);
+    DateLogic({ date: e.target.value, active: activeDate });
+  };
+
+  const handleTimeChange = (e) => {
+    setSpecificTime(e.target.value);
+    TimeLogic({ time: e.target.value, active: activeTime });
+  };
 
   const handleOpenBox = (box) => {
     setFieldType(box);
@@ -194,13 +229,19 @@ const SideBarFields = ({ onSaveField, initialData }) => {
                     Show based on URL conditions
                   </Typography>
                   <Switch
-                  // checked={showUrlHeading}
-                  // onChange={(e) => setShowUrlHeading(e.target.checked)}
+                    checked={urlConditionActive}
+                    onChange={(e) => setUrlConditionActive(e.target.checked)}
                   />
                 </Box>
 
                 <Box>
-                  <TextField variant="standard" fullWidth size="small" />{" "}
+                  <TextField
+                    variant="standard"
+                    fullWidth
+                    size="small"
+                    value={urlCondition}
+                    onChange={handleUrlConditionChange}
+                  />{" "}
                   {/* Decreased size */}
                 </Box>
               </Box>
@@ -226,8 +267,8 @@ const SideBarFields = ({ onSaveField, initialData }) => {
                     Show on a specific date
                   </Typography>
                   <Switch
-                  // checked={showUrlHeading}
-                  // onChange={(e) => setShowUrlHeading(e.target.checked)}
+                    checked={activeDate}
+                    onChange={(e) => setActiveDate(e.target.checked)}
                   />
                 </Box>
                 <TextField
@@ -236,6 +277,8 @@ const SideBarFields = ({ onSaveField, initialData }) => {
                   variant="outlined"
                   size="small" // Decreased size
                   fullWidth
+                  value={specificDate}
+                  onChange={handleDateChange}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -263,8 +306,8 @@ const SideBarFields = ({ onSaveField, initialData }) => {
                     Show on a specific time
                   </Typography>
                   <Switch
-                  // checked={showUrlHeading}
-                  // onChange={(e) => setShowUrlHeading(e.target.checked)}
+                    checked={activeTime}
+                    onChange={(e) => setActiveTime(e.target.checked)}
                   />
                 </Box>
 
@@ -274,6 +317,8 @@ const SideBarFields = ({ onSaveField, initialData }) => {
                   variant="outlined"
                   size="small" // Decreased size
                   fullWidth
+                  value={specificTime}
+                  onChange={handleTimeChange}
                   InputLabelProps={{
                     shrink: true,
                   }}

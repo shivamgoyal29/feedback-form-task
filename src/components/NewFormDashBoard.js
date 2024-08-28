@@ -5,15 +5,19 @@ import React, {
   useState,
 } from "react";
 import { Box } from "@mui/material";
-import FormSidebar from "./FormSideBar";
+import FormSidebar from "./SideBarComponentsBoxes/FormSideBar";
 import FormCard from "./FormCard";
 import CreateNewFormModal from "./CreateNewFormModal";
 import { useLocation } from "react-router-dom";
+import { saveFormData } from "../firebase/fireBaseOperations";
 
-const NewFormDashboard = forwardRef((props, ref) => {
+const NewFormDashboard = forwardRef(({ onFormSaved }, ref) => {
   const [savedFields, setSavedFields] = useState([]);
   const [initialData1, setInitialData1] = useState({});
   const [uniqueID, setUniqueId] = useState(1);
+  const [uRLlogic, setURLlogic] = useState({ active: false, path: "" });
+  const [dateLogic, setDateLogic] = useState({ active: false, date: "" });
+  const [timeLogic, setTimeLogic] = useState({ active: false, time: "" });
 
   const [open, setOpen] = useState(false);
   const [create, setCreate] = useState("");
@@ -68,30 +72,55 @@ const NewFormDashboard = forwardRef((props, ref) => {
     );
   };
 
-  const handleSaveFrom = ({ publish }) => {
+  const handleUrlLogic = (URLlogic) => {
+    setURLlogic(URLlogic);
+    console.log(URLlogic);
+  };
+
+  const handleDateLogic = (logic) => {
+    setDateLogic(logic);
+  };
+
+  const handleTimeLogic = (logic) => {
+    setTimeLogic(logic);
+  };
+
+  async function handleSaveFrom({ publish }) {
+    console.log("publish", publish);
     const formProperties = {
-      formID: "1",
+      formID: "",
       formName: formName,
       publishStatus: publish,
-      publishedDate: "",
       viewCount: 0,
       submitCount: 0,
       formLogic: {
-        URLlogic: { active: false, path: "" },
-        timeLogic: { active: false, time: "" },
-        dateLogic: { active: false, date: "" },
+        URLlogic: uRLlogic,
+        timeLogic: timeLogic,
+        dateLogic: dateLogic,
       },
-      inputFields: [
-        {
-          ID: 0,
-          label: "",
-          type: "textarea",
-          reuired: false,
-          errorMessage: "",
-          options: [],
-        },
-      ],
+      inputFields: savedFields.map((savedField) => ({
+        ID: savedField.id, // Make sure ID is correctly mapped
+        label: savedField.label.label,
+        type: savedField.type || "", // Default type if not provided
+        required: savedField.label.required || false,
+        errorMessage: savedField.label.errorMessage || "",
+        options: savedField.label.options || [],
+      })),
+      // inputFields: [
+      //   {
+      //     ID: 0,
+      //     label: "",
+      //     type: "textarea",
+      //     reuired: false,
+      //     errorMessage: "",
+      //     options: [],
+      //   },
+      // ],
     };
+
+    await saveFormData(formProperties); // Save form data to Firebase
+    console.log("Data Saved", savedFields);
+    onFormSaved();
 
     console.log("Data Saved");
     console.log(formProperties);
@@ -100,7 +129,7 @@ const NewFormDashboard = forwardRef((props, ref) => {
       // Handle publishing logic
     }
     // Perform save operations here, like API calls
-  };
+  }
 
   useImperativeHandle(ref, () => ({
     handleSaveFrom,
@@ -125,7 +154,13 @@ const NewFormDashboard = forwardRef((props, ref) => {
         />
       </Box>
 
-      <FormSidebar onSaveField={handleSaveField} initialData={initialData1} />
+      <FormSidebar
+        onSaveField={handleSaveField}
+        initialData={initialData1}
+        URLlogic={handleUrlLogic}
+        DateLogic={handleDateLogic}
+        TimeLogic={handleTimeLogic}
+      />
       <CreateNewFormModal
         open={open}
         handleClose={handleClose}
